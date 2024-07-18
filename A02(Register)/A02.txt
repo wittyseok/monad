@@ -1,0 +1,52 @@
+decode_operand :: Word32 -> Maybe Operand
+decode_operand w = 
+  if odd w
+  then Just (OperandVal (Val (shiftR w 1)))
+  else Just (OperandReg (remove (decode_reg (shiftR w 1))) )
+    where remove (Just x) = x
+
+
+OperandReg (Reg 16)
+
+
+instruction 구성
+Unary (reg, unaryop, operand
+Binary (reg, binaryop opreand opreand
+Load (reg, operand
+store (opreand, operand
+Jump (operand)
+condjump ( reg, operand, operand)
+
+
+ (Load (Reg 1,OperandVal (Val 0))) -> 4106
+
+
+
+ CondJump (Reg 0,OperandReg (Reg 1),OperandReg (Reg 1)) -> 8396805
+
+Non-exhaustive patterns in case
+      54
+3480de
+
+Store (OperandVal (Val 0),OperandVal (Val 1)) -> 12587011
+
+Binary (Reg 1,Sub,OperandReg (Reg 1),OperandVal (Val 0))->4202761
+
+CondJump (Reg 6,OperandVal (Val 7),OperandReg (Reg 3)) -> 25227317
+
+CondJump (Reg 19,OperandVal (Val 231),OperandVal (Val 49)) -> 417132701
+221
+
+
+(decode_unary_op ((shiftR w 8).&.(p 1 4)))
+
+if  Just (Store( remove(decode_operand ((shiftR w 12).&.(p 1 10))  ), remove( decode_operand ((shiftR w 22).&.(p 1 10))  )    )) == 3
+
+
+  0 -> Just (Unary( remove(decode_reg ((shiftR w 3).&.(p 1 5)) ) ,remove(decode_unary_op ((shiftR w 8).&.(p 1 4))) ,  remove(decode_operand ((shiftR w 12).&.(p 1 10))  ) ) )
+  1 -> Just (Binary(remove(decode_reg((shiftR w 3).&.(p 1 5))) ,remove(decode_binary_op ((shiftR w 8).&.(p 1 4))) ,remove(decode_operand((shiftR w 12).&.(p 1 10))) ,remove(decode_operand((shiftR w 22).&.(p 1 10)))))
+  2 -> Just (Load( remove(decode_reg((shiftR w 3).&.(p 1 5)) ), remove(decode_operand((shiftR w 12).&.(p 1 10)) )))
+  3 -> Just (Store( remove(decode_operand ((shiftR w 12).&.(p 1 10))  ), remove( decode_operand ((shiftR w 22).&.(p 1 10))  )    ))
+  4 -> Just (Jump ( remove(decode_operand((shiftR w 12).&.(p 1 10))   )))
+  5 -> Just (CondJump(remove (decode_reg ((shiftR w 3).&.(p 1 5))) ,remove(decode_operand((shiftR w 12).&.(p 1 10))) ,remove(decode_operand((shiftR w 22).&.(p 1 10))  ) ))
+  _ -> Nothing
